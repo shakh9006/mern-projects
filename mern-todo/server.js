@@ -24,9 +24,17 @@ app.use(cookieParser());
 /**
  * Register routes.
  */
-app.get('/test', (req, res) => {
-    res.send({test: 'ok'});
-}) // test route
+const todoRoutes = require('./server/routes/todoRoutes');
+const authRoutes = require('./server/routes/authRoutes');
+app.use('/api/v1/', todoRoutes);
+app.use('/user/', authRoutes);
+
+
+/**
+ * Register global error middleware.
+ */
+const routeMiddleware = require('./server/middlewares/routeMiddleware');
+app.use(routeMiddleware);
 
 /**
  * App starter async function
