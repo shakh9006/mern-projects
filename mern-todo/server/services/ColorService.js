@@ -29,8 +29,11 @@ class ColorService {
     }
 
     async getColorList() {
-        console.log('Color: ', Color);
         return await Color.find({}); // get all color list
+    }
+
+    async findOneBy(filter = {}) {
+        return await Color.findOne(filter);
     }
 }
 
