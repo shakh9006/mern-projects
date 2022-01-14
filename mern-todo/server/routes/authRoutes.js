@@ -1,4 +1,6 @@
 const router = require('express').Router();
-const colorRoutes = require('./todo-list/colorRoutes');
+const authRoutes = require('./auth/authRoutes');
+
+router.use('/', authRoutes);
 
 module.exports = router;

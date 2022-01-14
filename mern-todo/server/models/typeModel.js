@@ -9,10 +9,10 @@ const Type = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Color'
     },
-    // userID: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'User'
-    // },
+    userID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
 }, {timestamp: true});
 
 module.exports = mongoose.model('Type', Type);

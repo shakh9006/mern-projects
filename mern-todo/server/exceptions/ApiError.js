@@ -14,7 +14,7 @@ class ApiError {
         return new ApiError(500, message);
     }
 
-    static UnauthorizedRequest(message) {
+    static UnauthorizedRequest(message = 'Permission denied') {
         return new ApiError(401, message);
     }
 }
