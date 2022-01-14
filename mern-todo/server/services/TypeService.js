@@ -3,12 +3,12 @@ const Type = require('../models/typeModel');
 const ColorService = require('./ColorService');
 
 class TypeService {
-    async create(name, colorId) {
+    async create(name, colorId, userId) {
         const color = await ColorService.findOneBy({_id: colorId});
         if ( !color )
             throw ApiError.BadRequest(`Color with id: ${colorId} is not exist`);
 
-        const type = await Type.create({name, colorId});
+        const type = await Type.create({name, colorId, userId});
         await type.save();
 
         return {

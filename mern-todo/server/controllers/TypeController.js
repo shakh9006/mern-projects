@@ -4,7 +4,8 @@ class TypeController {
     async create(req, res, next) {
         try {
             const {name, color} = req.body;
-            const data = await TypeService.create(name, color);
+            const {id} = req.user;
+            const data = await TypeService.create(name, color, id);
             res.send(data);
         } catch (e) {
             next(e);

@@ -38,6 +38,7 @@ class UserController {
         try {
             const {refreshToken} = req.cookies;
             const data = await UserService.refresh(refreshToken);
+            res.cookie('refreshToken', data.refreshToken,  {httpOny: true, maxAge: 60 * 60 * 24 * 1000 * 30});
             res.send(data)
         } catch (e) {
             next(e)
@@ -46,7 +47,9 @@ class UserController {
 
     async activate(req, res, next) {
         try {
-
+            const {link} = req.params;
+            const redirectLink = await UserService.activate(link);
+            res.redirect(redirectLink);
         } catch (e) {
             next(e)
         }

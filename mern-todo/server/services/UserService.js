@@ -15,8 +15,7 @@ class UserService {
         const activationLink = uuid.v4();
         const user = await User.create({email, password: hashedPassword, activationLink});
         await user.save();
-        const data = new UserDto(user);
-        return await this.generateTokens(data);
+        return await this.generateTokens(user);
     }
 
     async login(email, password) {
@@ -28,8 +27,7 @@ class UserService {
         if ( !passwordCheck )
             throw ApiError.BadRequest(`Wrong email or password`);
 
-        const data = new UserDto(user);
-        return await this.generateTokens(data);
+        return await this.generateTokens(user);
     }
 
     async logout (refreshToken) {
@@ -43,14 +41,26 @@ class UserService {
         if (!refreshToken || !token || !userData)
             throw ApiError.UnauthorizedRequest();
 
-        return await this.generateTokens(userData)
+        const user = await this.findOneBy({email: userData.email});
+        return await this.generateTokens(user);
+    }
+
+    async activate(activationLink) {
+        const user = await this.findOneBy({activationLink});
+        if (user) {
+            user.isActivated = true;
+            await user.save();
+            return `${process.env.CLIENT_APP_URI}/`
+        }
+        return `${process.env.CLIENT_APP_URI}/404`;
     }
 
     async findOneBy(filter = {}) {
         return await User.findOne(filter);
     }
 
-    async generateTokens(user) {
+    async generateTokens(data) {
+        const user = new UserDto(data);
         const tokens = await TokenService.generateTokens({...user});
         await TokenService.create(user.id, tokens.refreshToken);
         return {
